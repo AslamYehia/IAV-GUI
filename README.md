@@ -1,2 +1,7 @@
 # IAV-GUI
-Custom design of user interface and user experience for Integrated Autonomous Vehicle Capstone Project
+Welcome to Integrated Autonomous Vehicle (IAV) Capstone custom made UI/UX 
+
+To use, please ensure that QT 5.9.7 is being used. 
+      You can download it from https://download.qt.io/official_releases/qt/5.9/5.9.7/
+      
+ Updates soon to come about how to use the GUI, how to add version control on QT, and how to use Git on Windows or Linux
