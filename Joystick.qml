@@ -14,11 +14,12 @@ Item
     Rectangle
     {
         id: boundery
-        width: 200
-        height: 200
+
+        width: parent.height
+        height: parent.height
 
         color: "transparent"
-        radius: 128
+        radius: height
         border { width:1; color: "red" }
 
         anchors.centerIn: parent
@@ -27,22 +28,18 @@ Item
         Rectangle
         {
             id: ball
-            width: 100
-            height: 100
+            width: parent.width / 2
+            height: parent.height / 2
             color: "seagreen"
             property point beginDrag
             border { width:1; color: "white" }
-            radius: 64
+            radius: height
             opacity: 0.5
             Drag.active: mouseArea.drag.active
 
-            x: parent.x + (width / 2) + (parent.width / 2)
-            y: parent.y + (height / 2) + (parent.height / 2)
+            x: parent.x + (width / 2)
+            y: parent.y + (height / 2)
 
-            Component.onCompleted:
-            {
-                beginDrag = Qt.point(x, y);
-            }
 
             MouseArea
             {
@@ -58,13 +55,12 @@ Item
                 onReleased:
                 {
                     backAnimX.from = ball.x;
-                    backAnimX.to = ball.beginDrag.x;
-                    backAnimY.from = ball.y;
-                    backAnimY.to = ball.beginDrag.y;
+                    backAnimX.to = ball.parent.x + (ball.width / 2)
+                    backAnimY.to = ball.parent.y + (ball.height / 2)
                     backAnim.start()
 
-                    ball.x = ball.beginDrag.x
-                    ball.y = ball.beginDrag.y
+                    ball.x = ball.parent.x + (ball.width / 2)
+                    ball.y = ball.parent.y + (ball.height / 2)
                 }
 
             }
@@ -75,11 +71,11 @@ Item
                 SpringAnimation { id: backAnimY; target: ball; property: "y"; duration: 500; spring: 1; damping: 0.2 }
             }
 
-//            update controler ui tracker every 1ms
+//            // update controler ui tracker every 0.1ms
 //            Timer
 //            {
 //                id: timer
-//                interval: 100
+//                interval: 10
 //                repeat: true
 //                running: true
 //                onTriggered:
@@ -97,6 +93,8 @@ Item
 //                realjoycontroler.getPositions()
 //                ball.x = ball.x + realjoycontroler.posX
 //                ball.y = ball.y + realjoycontroler.posY
+//                ball.x = ball.x + 1;
+//                ball.y = ball.y + 1;
 //            }
         }
     }

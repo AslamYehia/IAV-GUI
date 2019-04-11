@@ -15,8 +15,11 @@ import QtQuick 2.5
 Button
 {
     id: sliderToggler
-    width: 32
-    height: 96
+    property int rwidth: 64
+    property int rheight: 192
+    height: rheight +  (parent.height / rheight)
+    width: rwidth + (parent.width / rwidth - 8)
+
     checkable: true
     property alias checked: sliderToggler.checked
     anchors.verticalCenter: parent.verticalCenter
@@ -42,8 +45,8 @@ Button
     // there are two part for the MenuSlider
     Rectangle
     {
-        width: 16
-        height: 48
+        width: sliderToggler.width / 2
+        height: sliderToggler.height / 2
         color: "seagreen"
         antialiasing: true
         opacity: sliderToggler.buttonOpacity
@@ -61,8 +64,8 @@ Button
 
     Rectangle
     {
-        width: 16
-        height: 48
+        width: sliderToggler.width / 2
+        height: sliderToggler.height / 2
         color: "seagreen"
         antialiasing: true
         opacity: sliderToggler.buttonOpacity

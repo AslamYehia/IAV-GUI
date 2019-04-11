@@ -1,8 +1,5 @@
 //#include "joycontroler.h"
 
-
-//Need to implement new Joystick features with motor controller
-
 //JoyControler::JoyControler(QObject *parent) : QObject(parent)
 //{
 //    this->m_detected = false;

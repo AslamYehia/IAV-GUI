@@ -10,6 +10,10 @@ import QtQuick.VirtualKeyboard 2.1
 import QtQuick.VirtualKeyboard.Styles 2.2
 import QtQuick.VirtualKeyboard.Settings 2.2
 import io.simulation.networkchecker 1.0
+import QtMultimedia 5.4
+import QtQuick.Controls 2.2
+import QtQuick.Window 2.1
+
 
 // This is the main window for the application
 // will house and display every Component created
@@ -18,8 +22,11 @@ ApplicationWindow
     id: root
     visible: true
 
-    width: 2560 / 2
-    height: 1600 / 2
+    // original size
+    // width: 2560 / 1.8
+    // height: 1600 /1.8
+
+    Component.onCompleted: showMaximized()
 
     // The main color for the app is gray, but will not affect Component
     // with inline declearation of color
@@ -27,10 +34,10 @@ ApplicationWindow
 
     // the window for now is non-resizeable, hence min/max diamensions
     // are static
-    maximumHeight: height
-    maximumWidth: width
-    minimumHeight: height
-    minimumWidth: width
+//    maximumHeight: height
+//    maximumWidth: width
+    minimumHeight: 500
+    minimumWidth: 900
 
     // titile of main window,
     title: qsTr("Integrated Autonomous Vehicle")
@@ -91,12 +98,10 @@ ApplicationWindow
 
         onTriggered:
         {
-            console.log("loadtimer now running")
             loadIndicator.visible = true
             if( findLocation.status === GeocodeModel.Ready )
             {
                 loadIndicator.visible = false
-                console.log("loadtimer will stop")
                 findLocation.locate()
                 stop()
             }
@@ -125,17 +130,6 @@ ApplicationWindow
         onTriggered:
         {
             weather.getWeatherInfo()
-
-//            weatherslotc1text.text = qsTr( "Lon: " + weather.longitude.toFixed(1) +
-//                                           "\nLat: " + weather.latitude.toFixed(1) +
-//                                           "\nLoc: " + weather.cityName )
-//            weatherslotc2text.text = qsTr( "Temp: " + weather.temperature.toFixed(1) +
-//                                           "\nWind: " + weather.wind.toFixed(1) +
-//                                           "\nHumd: " + weather.humidity.toFixed(0) )
-//            weatherslotweathername.text = weather.weatherDescription
-
-//            weatherslotimage.source = "http://openweathermap.org/img/w/" + weather.imgCode + ".png"
-
             weatherslotweatherid.text = qsTr("Weather id: " + weather.weatherId.toFixed(0))
         }
 
@@ -152,7 +146,8 @@ ApplicationWindow
             id:topbar
 
             width: root.width
-            height: 40
+            // height: 80
+            height: root.width * (4/100)
             color: root.color
 
             // Component for displaying the time
@@ -181,7 +176,7 @@ ApplicationWindow
                     id: timetext
                     anchors.centerIn: parent
 
-                    font.pixelSize: 18
+                    font.pixelSize: 20
                    text: Qt.formatTime( new Date(), "hh:mm:ss ap" )
                 }
             }
@@ -202,7 +197,7 @@ ApplicationWindow
                 {
                     id: dateslottext
 
-                    font.pixelSize: 18
+                    font.pixelSize: 20
                     anchors.centerIn: parent
                     text: Qt.formatDate( new Date(), "ddd MMM d yyyy")
                 }
@@ -215,15 +210,24 @@ ApplicationWindow
                 height: parent.height
                 anchors.left: dateslot.right
                 anchors.right: connectivityslot.left
-                color: "black"
+                color: Qt.lighter("black")
                 border.color: Qt.lighter(color)
 
-                Image {
+                Text {
+
+                    id: titleslottext
                     anchors.centerIn: parent
-                    width: parent.width / 2
-                    height: parent.height
-                    source: "asserts/LOGO.png"
+                    text: "Navigation"
+                    font.pixelSize: 24
+                    color: "white"
+
                 }
+//                Image {
+//                    anchors.centerIn: parent
+//                    width: parent.width / 2
+//                    height: parent.height
+//                    source: "asserts/LOGO.png"
+//                }
             }
 
             // Component for displaying connectivity
@@ -241,7 +245,7 @@ ApplicationWindow
                 Text
                 {
                     id: connectivityslottext
-                    font.pixelSize: 18
+                    font.pixelSize: 20
                     anchors.centerIn: parent
                     text: qsTr("Connectivity: Bad ")
                     color: "red"
@@ -262,67 +266,10 @@ ApplicationWindow
 
                 border.color: Qt.lighter(color)
 
-//                Column
-//                {
-//                    id: weatherslotc1
-
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    height: parent.height
-//                    width: parent.width / 3
-//                    Text
-//                    {
-//                        // anchors.fill: parent
-//                        id: weatherslotc1text
-//                        font.pointSize: 12
-//                        text: qsTr( "Lon: " + weather.longitude.toFixed(1) +
-//                                    "\nLat: " + weather.latitude.toFixed(1) +
-//                                    "\nLoc: " + weather.cityName )
-//                    }
-//                }
-//                Column
-//                {
-//                    id: weatherslotc2
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    anchors.horizontalCenter: parent.horizontalCenter
-//                    anchors.left: weatherslotc1.right
-//                    height: parent.height
-//                    width: parent.width / 3
-//                    Text
-//                    {
-//                        id: weatherslotc2text
-
-//                        height: weatherslot.height
-//                        font.pointSize: 12
-//                        text: qsTr( "Temp: " + weather.temperature.toFixed(1) +
-//                                    "\nWind: " + weather.wind.toFixed(1) +
-//                                    "\nHumd: " + weather.humidity.toFixed(0) )
-//                    }
-//                }
-//                Image
-//                {
-//                    id: weatherslotimage
-
-//                    anchors.top: parent.top
-//                    anchors.horizontalCenter: parent.horizontalCenter
-//                    height: parent.height / 1.4
-//                    width: parent.width / 1.4
-
-//                    source: "http://openweathermap.org/img/w/" + weather.imgCode + ".png"
-//                    Text {
-
-//                        id: weatherslotweathername
-
-//                        font.pointSize: 14
-//                        anchors.horizontalCenter: weatherslotimage.horizontalCenter
-//                        anchors.top: weatherslotimage.bottom
-//                        text: weather.weatherDescription
-//                    }
-//                }
-
                 Text {
                     id: weatherslotweatherid
                     anchors.centerIn: parent
-                    font.pixelSize: 18
+                    font.pixelSize: 20
                     text: qsTr("Weather id: " + weather.weatherId.toFixed(0) )
                 }
 
@@ -337,7 +284,7 @@ ApplicationWindow
             id: middlebar
 
             width: root.width
-            height: 548
+            height: root.height - topbar.height - bottomcontrolbar.height
             color: root.color
             border.color: Qt.lighter(color)
 
@@ -351,10 +298,6 @@ ApplicationWindow
             {
                 active: true
                 id: mylocation
-                Component.onCompleted:
-                {
-                    console.log("Device positioning mdethod",  valid )
-                }
             }
             Location
             {
@@ -364,6 +307,7 @@ ApplicationWindow
                 property string addr: ""
             }
 
+            // This is the page for the navigation mode
             Map
             {
                 id: navigationmode
@@ -386,7 +330,7 @@ ApplicationWindow
                 {
                     id: searchBar
                     height: 128/3
-                    width: 1870/2
+                    width: middlebar.width * (70/100)
                     border.color: Qt.lighter("red")
                     anchors.top: parent.top
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -566,111 +510,112 @@ ApplicationWindow
                         }
                     }
                 }
-            }
-            GeocodeModel
-            {
-                plugin: mapplugin
 
-                id: findLocation
-                autoUpdate: true
-                limit: 3
 
-                property bool findLoc: false
-
-                function setLocation( )
+                GeocodeModel
                 {
-                    searchKey.text = destination.addr
-                    console.log( "choosen location: ", destination.addr )
-                    routeModel.updateRoute = routeModel.updateRoute ? false : true
-                    reset()
-                }
+                    plugin: mapplugin
 
-                onFindLocChanged:
-                {
-                    console.log( "Current query", query)
-                    searchResult0.visible = false
-                    searchResult1.visible = false
-                    searchResult2.visible = false
+                    id: findLocation
+                    autoUpdate: true
+                    limit: 3
 
-                    console.log( status, errorString, "ready: ", GeocodeModel.Ready )
+                    property bool findLoc: false
 
-                    if( status === GeocodeModel.Loading )
+                    function setLocation( )
                     {
-                        loadTimer.start()
+                        searchKey.text = destination.addr
+                        console.log( "choosen location: ", destination.addr )
+                        routeModel.updateRoute = routeModel.updateRoute ? false : true
+                        reset()
                     }
-                    else if( status === GeocodeModel.Ready )
+
+                    onFindLocChanged:
                     {
-                        findLocation.locate()
-                    }
-                }
-                function locate()
-                {
-                    if( status === GeocodeModel.Ready )
-                    {
-                        loadIndicator.visible = false
-                        console.log( "Locations are ready")
-                        console.log( "Found ", count, " match for ", query )
-                        if( count )
+                        console.log( "Current query", query)
+                        searchResult0.visible = false
+                        searchResult1.visible = false
+                        searchResult2.visible = false
+
+                        if( status === GeocodeModel.Loading )
                         {
-
-                            if( get(0) !== null )
-                            {
-                                searchResult0.visible = true
-                                searchResult0.location = get(0)
-                                searchResult0.text = searchResult0.location.address.text
-                                searchResult0.address = searchResult0.location.address.text
-
-                                searchResult0.lon = searchResult0.location.coordinate.longitude
-                                searchResult0.lat = searchResult0.location.coordinate.latitude
-                            }
-                            if( get(1) !== null )
-                            {
-                                searchResult1.visible = true
-                                searchResult1.location = get(1)
-                                searchResult1.text = searchResult1.location.address.text
-                                searchResult1.address = searchResult1.location.address.text
-
-                                searchResult1.lon = searchResult1.location.coordinate.longitude
-                                searchResult1.lat = searchResult1.location.coordinate.latitude
-                            }
-
-                            if( get(2) !== null )
-                            {
-                                searchResult2.visible = true
-                                searchResult2.location = get(2)
-                                searchResult2.text = searchResult2.location.address.text
-                                searchResult2.address = searchResult2.location.address.text
-
-                                searchResult2.lon = searchResult2.location.coordinate.longitude
-                                searchResult2.lat = searchResult2.location.coordinate.latitude
-                            }
+                            loadTimer.start()
+                        }
+                        else if( status === GeocodeModel.Ready )
+                        {
+                            findLocation.locate()
                         }
                     }
+                    function locate()
+                    {
+                        if( status === GeocodeModel.Ready )
+                        {
+                            loadIndicator.visible = false
+                            console.log( "Locations are ready")
+                            console.log( "Found ", count, " match for ", query )
+                            if( count )
+                            {
 
-                    update()
+                                if( get(0) !== null )
+                                {
+                                    searchResult0.visible = true
+                                    searchResult0.location = get(0)
+                                    searchResult0.text = searchResult0.location.address.text
+                                    searchResult0.address = searchResult0.location.address.text
+
+                                    searchResult0.lon = searchResult0.location.coordinate.longitude
+                                    searchResult0.lat = searchResult0.location.coordinate.latitude
+                                }
+                                if( get(1) !== null )
+                                {
+                                    searchResult1.visible = true
+                                    searchResult1.location = get(1)
+                                    searchResult1.text = searchResult1.location.address.text
+                                    searchResult1.address = searchResult1.location.address.text
+
+                                    searchResult1.lon = searchResult1.location.coordinate.longitude
+                                    searchResult1.lat = searchResult1.location.coordinate.latitude
+                                }
+
+                                if( get(2) !== null )
+                                {
+                                    searchResult2.visible = true
+                                    searchResult2.location = get(2)
+                                    searchResult2.text = searchResult2.location.address.text
+                                    searchResult2.address = searchResult2.location.address.text
+
+                                    searchResult2.lon = searchResult2.location.coordinate.longitude
+                                    searchResult2.lat = searchResult2.location.coordinate.latitude
+                                }
+                            }
+                        }
+
+                        update()
+                    }
+
+                    Component.onCompleted: update()
                 }
-
-                Component.onCompleted: update()
-            }
-            RouteModel
-            {
-                id: routeModel
-                plugin: mapplugin
-                query: RouteQuery{ id: routeQuery }
-                property bool updateRoute: false
-                onUpdateRouteChanged:
+                RouteModel
                 {
-                    routeQuery.clearWaypoints()
-                    console.log( "Destination coor: ", destination.lat, destination.lon )
-                    routeQuery.addWaypoint( mylocation.position.coordinate )
-                    routeQuery.addWaypoint( QtPositioning.coordinate(destination.lat, destination.lon) )
-                    update()
-                    update()
-                    console.log( "Destination coor: ", destination.addr )
+                    id: routeModel
+                    plugin: mapplugin
+                    query: RouteQuery{ id: routeQuery }
+                    property bool updateRoute: false
+                    onUpdateRouteChanged:
+                    {
+                        routeQuery.clearWaypoints()
+                        console.log( "Destination coor: ", destination.lat, destination.lon )
+                        routeQuery.addWaypoint( mylocation.position.coordinate )
+                        routeQuery.addWaypoint( QtPositioning.coordinate(destination.lat, destination.lon) )
+                        update()
+                        update()
+                        console.log( "Destination coor: ", destination.addr )
+                    }
                 }
+
             }
 
-            // this is the page for the driving mode
+            // This is the page for the driving mode
             Rectangle
             {
                 visible: false
@@ -679,30 +624,481 @@ ApplicationWindow
                 color: parent.color
                 height: parent.height
                 width: parent.width
-                Text {
-                    font.pixelSize: 40
-                    anchors.centerIn: parent
-                    text: qsTr("Driving mode")
-                }
-                Joystick
+
+                Rectangle
                 {
-                    anchors.right: parent.right
-                    anchors.rightMargin: 100
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 100
+                    id: navigationmodetopbar
+                    width: parent.width
+                    height: 60
+                    color: "white"
+                    anchors.top: parent.top
+
+                    Text
+                    {
+                        id: automodetext
+                        text: qsTr("Autonomous Mode")
+                        x: switchbutton.x - width - 10
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Switch
+                    {
+                        id: switchbutton
+                        anchors.centerIn: parent
+                    }
+                    Text
+                    {
+                        anchors.verticalCenter: parent.verticalCenter
+                        x: switchbutton.x + switchbutton.width + 10
+                        text: qsTr("On/Off")
+                    }
+                }
+
+                Rectangle
+                {
+                    id: camarawindow
+                    width: parent.width
+                    height: parent.height - navigationmodetopbar.height
+                    anchors.top: navigationmodetopbar.bottom
+                    color: parent.color
+
+                    Grid
+                    {
+                       rows: 2
+                       columns: 3
+                       anchors.centerIn: parent
+
+                       Rectangle
+                       {
+                           // slot for camera 1
+                           id: camara1
+                           color: "orange"
+                           border.color: Qt.lighter(color)
+                           height: camarawindow.height/2
+                           width: camarawindow.width/3
+
+                           Video
+                           {
+                               id: camara1video
+                               width: parent.width
+                               height: parent.height
+                               autoPlay: true
+                               source: videoPath + "video1.mp4"
+                               fillMode: VideoOutput.PreserveAspectCrop
+                               Component.onCompleted:
+                               {
+                                   // console.log(videoPath)
+                               }
+                           }
+
+                       }
+                       Rectangle
+                       {
+                           // slot for camera 2
+                           id: camara2
+                           color: "gray"
+                           border.color: Qt.lighter(color)
+                           height: camarawindow.height/2
+                           width: camarawindow.width/3
+
+                           Video
+                           {
+                               id: camara2video
+                               width: parent.width
+                               height: parent.height
+                               autoPlay: true
+                               source: videoPath + "video2.mp4"
+                               fillMode: VideoOutput.PreserveAspectCrop
+                           }
+
+                       }
+                       Rectangle
+                       {
+                           // slot for camera 3
+                           id: camara3
+                           color: "brown"
+                           border.color: Qt.lighter(color)
+                           height: camarawindow.height/2
+                           width: camarawindow.width/3
+
+                           Video
+                           {
+                               id: camara3video
+                               width: parent.width
+                               height: parent.height
+                               autoPlay: true
+                               source: videoPath + "video3.mp4"
+                               fillMode: VideoOutput.PreserveAspectCrop
+                           }
+
+                       }
+                       Rectangle
+                       {
+                           // slot for camera 4
+                           id: camara4
+                           color: "yellow"
+                           border.color: Qt.lighter(color)
+                           height: camarawindow.height/2
+                           width: camarawindow.width/3
+
+                           Video
+                           {
+                               id: camara4video
+                               width: parent.width
+                               height: parent.height
+                               autoPlay: true
+                               source: videoPath + "video4.mp4"
+                               fillMode: VideoOutput.PreserveAspectCrop
+                           }
+                       }
+                       Rectangle
+                       {
+                           // slot for camera 5
+                           id: camara5
+                           color: "blue"
+                           border.color: Qt.lighter(color)
+                           height: camarawindow.height/2
+                           width: camarawindow.width/3
+
+                           Video
+                           {
+                               id: camara5video
+                               width: parent.width
+                               height: parent.height
+                               autoPlay: true
+                               source: videoPath + "video5.mp4"
+                               fillMode: VideoOutput.PreserveAspectCrop
+                           }
+                       }
+                       Rectangle
+                       {
+                           // slot for camera 6
+                           id: camara6
+                           color: "green"
+                           border.color: Qt.lighter(color)
+                           height: camarawindow.height/2
+                           width: camarawindow.width/3
+
+                           Video
+                           {
+                               id: camara6video
+                               width: parent.width
+                               height: parent.height
+                               autoPlay: true
+                               source: videoPath + "video6.mp4"
+                               fillMode: VideoOutput.PreserveAspectCrop
+                           }
+                       }
+                    }
                 }
             }
-            // this is the page for settings
+            // This is the page for settings
             Rectangle
             {
                 visible: false
                 id: settingmode
                 anchors.fill: parent
                 color: parent.color
-                Text {
+
+                Column
+                {
                     anchors.centerIn: parent
-                    font.pixelSize: 40
-                    text: qsTr("Settings")
+
+                    Rectangle
+                    {
+                        height: 50
+                        width: settingmode.width / 2
+                        Row
+                        {
+                            height: parent.height
+                            width: parent.width
+                            anchors.fill: parent
+
+                            Rectangle
+                            {
+                                color: Qt.lighter("gray")
+                                height: parent.height
+                                width: settingmode.width/4
+
+                                Text
+                                {
+                                    id: stereo1text
+                                    text: qsTr("OFF")
+                                    horizontalAlignment: Text.AlignRight
+                                    anchors.verticalCenter: stereo1switch.verticalCenter
+                                    width: parent.width * (15/100)
+                                }
+                                Switch
+                                {
+                                    id: stereo1switch
+                                    text: qsTr("Stereo Camera 1 (ON/OFF)")
+                                    width: parent.width * (75/100)
+                                    anchors.left: stereo1text.right
+                                    onClicked:
+                                    {
+                                        if( checked )
+                                            stereo1text.text = "ON"
+                                        else
+                                            stereo1text.text = "OFF"
+                                    }
+                                }
+                            }
+                            Rectangle
+                            {
+                                height: parent.height
+                                width: settingmode.width/4
+                                color: Qt.lighter("lightgray")
+                                Text
+                                {
+                                    id: stereo2text
+                                    text: qsTr("OFF")
+                                    horizontalAlignment: Text.AlignRight
+                                    anchors.verticalCenter: stereo2switch.verticalCenter
+                                    width: parent.width * (15/100)
+                                }
+                                Switch
+                                {
+                                    id: stereo2switch
+                                    text: qsTr("Stereo Camera 2 (ON/OFF)")
+                                    width: parent.width * (75/100)
+                                    anchors.left: stereo2text.right
+
+                                    onClicked:
+                                    {
+                                        if( checked )
+                                            stereo2text.text = "ON"
+                                        else
+                                            stereo2text.text = "OFF"
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle
+                    {
+                        height: 50
+                        width: settingmode.width / 2
+                        Row
+                        {
+                            height: parent.height
+                            width: parent.width
+
+                            anchors.centerIn: parent
+                            Rectangle
+                            {
+                                color: Qt.lighter("gray")
+                                height: parent.height
+                                width: settingmode.width/4
+                                Text
+                                {
+                                    id: monocular1text
+                                    text: qsTr("OFF")
+                                    horizontalAlignment: Text.AlignRight
+                                    anchors.verticalCenter: monocular1switch.verticalCenter
+                                    width: parent.width * (15/100)
+                                }
+                                Switch
+                                {
+                                    id: monocular1switch
+                                    text: qsTr("Monocular Camera 1 (ON/OFF)")
+                                    width: parent.width * (75/100)
+                                    anchors.left: monocular1text.right
+                                    onClicked:
+                                    {
+                                        if( checked )
+                                            monocular1text.text = "ON"
+                                        else
+                                            monocular1text.text = "OFF"
+                                    }
+                                }
+                            }
+                            Rectangle
+                            {
+                                height: parent.height
+                                width: settingmode.width/4
+                                color: Qt.lighter("lightgray")
+                                Text
+                                {
+                                    id: monocular2text
+                                    text: qsTr("OFF")
+                                    horizontalAlignment: Text.AlignRight
+                                    anchors.verticalCenter: monocular2switch.verticalCenter
+                                    width: parent.width * (15/100)
+                                }
+                                Switch
+                                {
+                                    id: monocular2switch
+                                    text: qsTr("Monocular Camera 2 (ON/OFF)")
+                                    width: parent.width * (75/100)
+                                    anchors.left: monocular2text.right
+
+                                    onClicked:
+                                    {
+                                        if( checked )
+                                            monocular2text.text = "ON"
+                                        else
+                                            monocular2text.text = "OFF"
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle
+                    {
+                        height: 50
+                        width: settingmode.width / 2
+                        Row
+                        {
+                            height: parent.height
+                            width: parent.width
+
+                            anchors.centerIn: parent
+                            Rectangle
+                            {
+                                color: Qt.lighter("gray")
+                                height: parent.height
+                                width: settingmode.width/4
+                                Text
+                                {
+                                    id: lidartext
+                                    text: qsTr("OFF")
+                                    horizontalAlignment: Text.AlignRight
+                                    anchors.verticalCenter: lidarswitch.verticalCenter
+                                    width: parent.width * (15/100)
+                                }
+                                Switch
+                                {
+                                    id: lidarswitch
+                                    text: qsTr("Lidar Camera (ON/OFF)")
+                                    width: parent.width * (75/100)
+                                    anchors.left: lidartext.right
+                                    onClicked:
+                                    {
+                                        if( checked )
+                                            lidartext.text = "ON"
+                                        else
+                                            lidartext.text = "OFF"
+                                    }
+                                }
+                            }
+
+                            Rectangle
+                            {
+                                height: parent.height
+                                width: settingmode.width/4
+                                color: Qt.lighter("lightgray")
+                                Text
+                                {
+                                    id: gnsstext
+                                    text: qsTr("OFF")
+                                    horizontalAlignment: Text.AlignRight
+                                    anchors.verticalCenter: gnssswitch.verticalCenter
+                                    width: parent.width * (15/100)
+                                }
+                                Switch
+                                {
+                                    id: gnssswitch
+                                    text: qsTr("GNSS/IMU Camera (ON/OFF)")
+                                    width: parent.width * (75/100)
+                                    anchors.left: gnsstext.right
+
+                                    onClicked:
+                                    {
+                                        if( checked )
+                                            gnsstext.text = "ON"
+                                        else
+                                            gnsstext.text = "OFF"
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle
+                    {
+                        height: 50
+                        width: settingmode.width / 2
+                        Row
+                        {
+                            height: parent.height
+                            width: parent.width
+
+                            anchors.centerIn: parent
+                            Rectangle
+                            {
+                                color: Qt.lighter("gray")
+                                height: parent.height
+                                width: settingmode.width/4
+                                Text
+                                {
+                                    id: fftext
+                                    text: qsTr("OFF")
+
+                                    horizontalAlignment: Text.AlignRight
+                                    anchors.verticalCenter: ffswitch.verticalCenter
+                                    width: parent.width * (15/100)
+                                }
+                                Switch
+                                {
+                                    id: ffswitch
+                                    text: qsTr("Fast and Furious (ON/OFF)")
+                                    width: parent.width * (75/100)
+                                    anchors.left: fftext.right
+                                    onClicked:
+                                    {
+                                        if( checked )
+                                            fftext.text = "ON"
+                                        else
+                                            fftext.text = "OFF"
+                                    }
+                                }
+                            }
+
+
+                            Rectangle
+                            {
+                                height: parent.height
+                                width: settingmode.width/4
+                                color: Qt.lighter("lightgray")
+
+                                Text
+                                {
+
+                                    id: maxspeedlabel
+                                    anchors.left: parent.left
+                                    height: parent.height
+                                    width: parent.width * (50/100)
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: qsTr("Set Max Speed: ")
+                                    color: "#474444"
+                                    font.pointSize: 14
+                                    anchors.leftMargin: 20
+                                }
+
+                                Rectangle
+                                {
+                                    width: parent.width * (30/100)
+                                    height: parent.height
+                                    anchors.leftMargin: 20
+                                    anchors.bottomMargin: 10
+                                    border.color: Qt.lighter("black")
+                                    anchors.left: maxspeedlabel.right
+                                    TextInput
+                                    {
+                                        id: inputmaxspeed
+                                        anchors.centerIn: parent
+                                        width: parent.width
+                                        height: parent.height / 3
+                                        anchors.verticalCenterOffset: -1
+                                        anchors.horizontalCenterOffset: 0
+                                        leftPadding: 10
+                                        focus: true
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -710,8 +1106,10 @@ ApplicationWindow
             {
                 id: mainMenu
 
-                width: 420/2
-                height: 701/2
+                // width: 420
+                // height: 701
+                width: middlebar.width * (50/100)
+                height: middlebar.height * (90/100)
                 anchors.verticalCenter: parent.verticalCenter
 
                 onButtonClickedChanged:
@@ -721,31 +1119,34 @@ ApplicationWindow
                         navigationmode.visible = true
                         drivignmode.visible = false
                         settingmode.visible = false
+                        titleslottext.text = "Navigation"
                     }
                     else if( buttonClicked == 1 )
                     {
                         navigationmode.visible = false
                         drivignmode.visible = true
                         settingmode.visible = false
+                        titleslottext.text = "Driving Mode"
                     }
                     else if( buttonClicked == 2 )
                     {
                         navigationmode.visible = false
                         drivignmode.visible = false
                         settingmode.visible = true
+                        titleslottext.text = "Settings"
                     }
-
                 }
             }
 
         }
-        // this Rectangle will hold Components on the bottom bar of the window
+        // This Rectangle will hold Components on the bottom bar of the window
         Rectangle
         {
             id: bottomcontrolbar
 
             width: root.width
-            height: 251/2
+            // height: 251
+            height: root.height * (15/100)
             color: root.color
 
 
@@ -818,14 +1219,15 @@ ApplicationWindow
                 height: parent.height
                 anchors.right: batteryinformation.left
                 anchors.rightMargin: 1
-                color: Qt.lighter("green")
+                color: Qt.lighter("white")
                 border.color: Qt.lighter(color)
 
-                Text {
-                    font.pixelSize: 18
+                Joystick
+                {
                     anchors.centerIn: parent
-                    elide: Text.ElideMiddle
-                    text: qsTr(" Vehicle Steering Bar: ")
+                    width: parent.height
+                    height: parent.height
+
                 }
             }
             // Component holds slot for battery information

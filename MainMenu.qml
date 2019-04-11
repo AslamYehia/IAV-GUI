@@ -15,9 +15,14 @@ Item {
     Rectangle
     {
         id: menubar
-        width: 420/2
-        height: 701/2
+//        width: 420
+//        height: 701
+        width: parent.width * (50/100)
+        height: parent.height * (90/100)
         color: "transparent"
+
+        // property int fullwidth: 420
+        property int fullwidth: parent.width * (50/100)
 
         anchors.verticalCenter: parent.verticalCenter
 
@@ -52,7 +57,7 @@ Item {
                 id: menuitem1label
 
                 font.bold: true
-                font.pixelSize: 18
+                font.pixelSize: 24
                 anchors.horizontalCenter: menuitem1image.horizontalCenter
                 anchors.top: menuitem1image.bottom
                 text: qsTr("Navigation")
@@ -90,7 +95,7 @@ Item {
             {
                 id: menuitem2label
 
-                font.pixelSize: 18
+                font.pixelSize: 24
                 font.bold: true
                 anchors.horizontalCenter: menuitem2image.horizontalCenter
                 anchors.top: menuitem2image.bottom
@@ -131,7 +136,7 @@ Item {
             {
                 id: menuitem3label
 
-                font.pixelSize: 18
+                font.pixelSize: 24
                 font.bold: true
                 anchors.horizontalCenter: menuitem3image.horizontalCenter
                 anchors.top: menuitem3image.bottom
@@ -155,7 +160,7 @@ Item {
         onClicked:
         {
             checked: checked ? true : false
-            menubar.width = !checked ? 420/2 : 5
+            menubar.width = !checked ? menubar.fullwidth : 5
             menuitem1label.visible = !checked ? true : false
             menuitem2label.visible = !checked ? true : false
             menuitem3label.visible = !checked ? true : false
