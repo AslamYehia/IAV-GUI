@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>asserts/navigation.png</file>
+        <file>asserts/settings</file>
+        <file>asserts/slider.png</file>
+        <file>MainMenu.qml</file>
+        <file>MenuSlider.qml</file>
+        <file>asserts/driving.png</file>
+        <file>asserts/point.png</file>
+        <file>asserts/LOGO.png</file>
+        <file>Joystick.qml</file>
+    </qresource>
+</RCC>
